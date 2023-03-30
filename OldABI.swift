@@ -6,6 +6,11 @@ import MachO
 public func ctor() {
     let ekhandle = dlopen("/var/jb/usr/lib/libellekit.dylib", RTLD_NOW);
     let hookFunction = unsafeBitCast(dlsym(ekhandle, "MSHookMemory"), to: (@convention (c) (UnsafeRawPointer, UnsafeRawPointer, size_t) -> Void).self);
+    
+    if ProcessInfo.processInfo.processName.contains("WebContent") {
+        return; // Not working here....
+    }
+    
     for image in 0..<_dyld_image_count() {
         if String(cString: _dyld_get_image_name(image)) == "/usr/lib/libobjc.A.dylib" ||
             String(cString: _dyld_get_image_name(image)) == "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" {
