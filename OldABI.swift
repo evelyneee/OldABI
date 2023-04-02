@@ -19,6 +19,9 @@ public func ctor() {
                 ],
                 [
                     0x50, 0x19, 0xC1, 0xDA // autda x16, x10 (objc_msgSend...)
+                ],
+                [
+                    0x70, 0x1A, 0xC1, 0xDA // autda x16, x19 (objc_duplicateClass)
                 ]
             ]
             
