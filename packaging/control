@@ -1,0 +1,8 @@
+Architecture: iphoneos-arm64
+Author: Charlotte
+Depends: ellekit (>= 0.4), cy+cpu.arm64e, firmware (>= 15.0)
+Description: Support for legacy arm64e ABI in iOS 15.0+
+Package: oldabi
+Maintainer: Charlotte
+Name: Legacy arm64e Support
+Version: 1.0
