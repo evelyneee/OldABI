@@ -6,13 +6,16 @@ import MachO
 public func ctor() {
         
     let blacklist = [
-        "WebKit",
-        "WebContent",
+        "webkit",
+        "webcontent",
         "apt",
-        "dpkg"
+        "dpkg",
+        "mterminal",
+        "icloud",
+        "sh"
     ]
         .map {
-            ProcessInfo.processInfo.processName.contains($0)
+            ProcessInfo.processInfo.processName.lowercased().contains($0)
         }
         .contains(true)
     
