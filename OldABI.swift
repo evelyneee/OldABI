@@ -4,15 +4,19 @@ import MachO
 
 @_cdecl("swift_ctor")
 public func ctor() {
-        
+            
     let blacklist = [
         "webkit",
         "webcontent",
         "apt",
         "dpkg",
         "mterminal",
-        "icloud",
-        "sh"
+        "cloud",
+        "druid",
+        "dasd",
+        "sshd",
+        "zsh",
+        "jailbreakd"
     ]
         .map {
             ProcessInfo.processInfo.processName.lowercased().contains($0)
