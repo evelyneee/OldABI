@@ -31,11 +31,11 @@ public func ctor() {
         if String(cString: _dyld_get_image_name(image)) == "/usr/lib/libobjc.A.dylib" ||
             String(cString: _dyld_get_image_name(image)) == "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" {
             var bytes: [UInt8] = [
-                0x00, 0x18, 0xC1, 0xDA
+                0x10, 0x18, 0xC1, 0xDA
             ]
             
             var mask: [UInt8] = [
-                0x00, 0xFC, 0xFF, 0xFF
+                0x1F, 0xFC, 0xFF, 0xFF
             ]
             
             while true {
