@@ -7,13 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E5D8B0629DE46080068D078 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5D8B0529DE46080068D078 /* main.swift */; };
 		9EF3204B29D4CD8C00175976 /* OldABI.h in Headers */ = {isa = PBXBuildFile; fileRef = 9EF3204929D4CD8C00175976 /* OldABI.h */; };
 		9EF3204C29D4CD8C00175976 /* OldABI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3204A29D4CD8C00175976 /* OldABI.swift */; };
 		9EF3204F29D4CE0700175976 /* patchfind.h in Headers */ = {isa = PBXBuildFile; fileRef = 9EF3204D29D4CE0700175976 /* patchfind.h */; };
 		9EF3205029D4CE0700175976 /* patchfind.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF3204E29D4CE0700175976 /* patchfind.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		9E5D8B0129DE46080068D078 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		9E5D8B0329DE46080068D078 /* tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tests; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E5D8B0529DE46080068D078 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; usesTabs = 0; };
 		9EF3204229D4CD8200175976 /* OldABI.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = OldABI.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EF3204929D4CD8C00175976 /* OldABI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OldABI.h; sourceTree = "<group>"; };
 		9EF3204A29D4CD8C00175976 /* OldABI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldABI.swift; sourceTree = "<group>"; };
@@ -22,6 +37,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9E5D8B0029DE46080068D078 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9EF3204029D4CD8200175976 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -32,6 +54,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E5D8B0429DE46080068D078 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				9E5D8B0529DE46080068D078 /* main.swift */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
 		9EF3203929D4CD8200175976 = {
 			isa = PBXGroup;
 			children = (
@@ -39,6 +69,7 @@
 				9EF3204A29D4CD8C00175976 /* OldABI.swift */,
 				9EF3204D29D4CE0700175976 /* patchfind.h */,
 				9EF3204E29D4CE0700175976 /* patchfind.m */,
+				9E5D8B0429DE46080068D078 /* tests */,
 				9EF3204329D4CD8200175976 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				9EF3204229D4CD8200175976 /* OldABI.dylib */,
+				9E5D8B0329DE46080068D078 /* tests */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,6 +98,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		9E5D8B0229DE46080068D078 /* tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E5D8B0929DE46080068D078 /* Build configuration list for PBXNativeTarget "tests" */;
+			buildPhases = (
+				9E5D8AFF29DE46080068D078 /* Sources */,
+				9E5D8B0029DE46080068D078 /* Frameworks */,
+				9E5D8B0129DE46080068D078 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tests;
+			productName = tests;
+			productReference = 9E5D8B0329DE46080068D078 /* tests */;
+			productType = "com.apple.product-type.tool";
+		};
 		9EF3204129D4CD8200175976 /* OldABI */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9EF3204629D4CD8200175976 /* Build configuration list for PBXNativeTarget "OldABI" */;
@@ -90,8 +139,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
+					9E5D8B0229DE46080068D078 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					9EF3204129D4CD8200175976 = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -111,11 +164,20 @@
 			projectRoot = "";
 			targets = (
 				9EF3204129D4CD8200175976 /* OldABI */,
+				9E5D8B0229DE46080068D078 /* tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9E5D8AFF29DE46080068D078 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9E5D8B0629DE46080068D078 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9EF3203F29D4CD8200175976 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +190,32 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		9E5D8B0729DE46080068D078 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9E5D8B0829DE46080068D078 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		9EF3204429D4CD8200175976 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -286,6 +374,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9E5D8B0929DE46080068D078 /* Build configuration list for PBXNativeTarget "tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E5D8B0729DE46080068D078 /* Debug */,
+				9E5D8B0829DE46080068D078 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9EF3203D29D4CD8200175976 /* Build configuration list for PBXProject "OldABI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

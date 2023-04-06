@@ -2,6 +2,8 @@
 import Foundation
 import MachO
 
+let ekhandle = dlopen("/var/jb/usr/lib/libellekit.dylib", RTLD_NOW);
+
 typealias FileHandleC = UnsafeMutablePointer<FILE>
 extension FileHandleC {
     @inline(__always)
@@ -31,8 +33,6 @@ extension FileHandleC {
     }
 }
 
-let ekhandle = dlopen("/var/jb/usr/lib/libellekit.dylib", RTLD_NOW);
-
 let hookMemory = {
     unsafeBitCast(dlsym(ekhandle, "MSHookMemory"), to: (@convention (c) (UnsafeRawPointer, UnsafeRawPointer, size_t) -> Void).self)
 }()
@@ -40,37 +40,6 @@ let hookMemory = {
 let hookFunction = {
     unsafeBitCast(dlsym(ekhandle, "MSHookFunction"), to: (@convention (c) (UnsafeRawPointer, UnsafeRawPointer, UnsafeMutablePointer<UnsafeMutableRawPointer?>?) -> Void).self)
 }()
-
-func oneshot_fix_oldabi() {
-    
-    for image in 0..<_dyld_image_count() {
-        if String(cString: _dyld_get_image_name(image)) == "/usr/lib/libobjc.A.dylib" ||
-            String(cString: _dyld_get_image_name(image)) == "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" {
-            var bytes: [UInt8] = [
-                0x00, 0x18, 0xC1, 0xDA
-            ]
-            
-            var mask: [UInt8] = [
-                0x00, 0xFC, 0xFF, 0xFF
-            ]
-            
-            while true {
-                let autda = patchfind_find(Int32(image), &bytes, &mask, 4)
-                                
-                if let autda {
-                    
-                    NSLog("Found patch location")
-                    
-                    hookMemory(autda, [
-                        CFSwapInt32(0xF047C1DA) // xpacd x16
-                    ], 4)
-                } else {
-                    break
-                }
-            }
-        }
-    }
-}
 
 func looksLegacy(_ path: UnsafePointer<CChar>) -> Bool {
     guard let handle = fopen(path, "r") else {
@@ -129,25 +98,8 @@ func looksLegacy(_ path: UnsafePointer<CChar>) -> Bool {
     return false
 }
 
-typealias dlopen_body = @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRawPointer
+print("RESULT:", looksLegacy("/Users/charlotte/Downloads/oldABI.dylib") == true)
 
-let orig: UnsafeMutablePointer<UnsafeMutableRawPointer?> = .allocate(capacity: 8)
+print("RESULT:", looksLegacy("/Users/charlotte/Downloads/newABI.dylib") == false)
 
-@_cdecl("dlopen_hook")
-func dlopen_hook(_ path: UnsafePointer<CChar>, _ loadtype: Int32) -> UnsafeRawPointer {
-    if looksLegacy(path) {
-        NSLog("looks legacy to me!")
-        oneshot_fix_oldabi()
-    }
-        
-    return unsafeBitCast(orig.pointee, to: dlopen_body.self)(path, loadtype)
-}
-
-@_cdecl("swift_ctor")
-public func ctor() {
-    
-    let repcl: @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRawPointer = dlopen_hook
-    let repptr = unsafeBitCast(repcl, to: UnsafeMutableRawPointer.self)
-    
-    hookFunction(dlsym(dlopen(nil, RTLD_NOW), "dlopen"), repptr, orig)
-}
+print("ATRIA:", looksLegacy("/Users/charlotte/Downloads/me.lau.atria_1.3-1.3_iphoneos-arm64/var/jb/Library/MobileSubstrate/DynamicLibraries/Atria.dylib") == true)
