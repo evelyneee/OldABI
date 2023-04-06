@@ -146,6 +146,28 @@ func dlopen_hook(_ path: UnsafePointer<CChar>, _ loadtype: Int32) -> UnsafeRawPo
 @_cdecl("swift_ctor")
 public func ctor() {
     
+    let blacklist = [
+        "webkit",
+        "webcontent",
+        "apt",
+        "dpkg",
+        "mterminal",
+        "cloud",
+        "druid",
+        "dasd",
+        "sshd",
+        "zsh",
+        "jailbreakd"
+    ]
+        .map {
+            ProcessInfo.processInfo.processName.lowercased().contains($0)
+        }
+        .contains(true)
+    
+    guard !blacklist else {
+        return
+    }
+    
     let repcl: @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRawPointer = dlopen_hook
     let repptr = unsafeBitCast(repcl, to: UnsafeMutableRawPointer.self)
     
