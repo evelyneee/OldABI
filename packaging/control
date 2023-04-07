@@ -5,4 +5,4 @@ Description: Support for legacy arm64e ABI in iOS 15.0+
 Package: oldabi
 Maintainer: Evelyn
 Name: Legacy arm64e Support
-Version: 1.0
+Version: @DEB_VERSION@
