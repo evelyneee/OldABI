@@ -58,9 +58,6 @@ func oneshot_fix_oldabi() {
                 let autda = patchfind_find(Int32(image), &bytes, &mask, 4)
                                 
                 if let autda {
-                    
-                    NSLog("Found patch location")
-                    
                     hookMemory(autda, [
                         CFSwapInt32(0xF047C1DA) // xpacd x16
                     ], 4)
@@ -133,10 +130,9 @@ typealias dlopen_body = @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRa
 
 let orig: UnsafeMutablePointer<UnsafeMutableRawPointer?> = .allocate(capacity: 8)
 
-@_cdecl("dlopen_hook")
-func dlopen_hook(_ path: UnsafePointer<CChar>, _ loadtype: Int32) -> UnsafeRawPointer {
+@_cdecl("dlopen_hook_oldabi")
+func dlopen_hook_oldabi(_ path: UnsafePointer<CChar>, _ loadtype: Int32) -> UnsafeRawPointer {
     if looksLegacy(path) {
-        NSLog("looks legacy to me!")
         oneshot_fix_oldabi()
     }
         
@@ -148,7 +144,6 @@ public func ctor() {
     
     let blacklist = [
         "webkit",
-        "webcontent",
         "apt",
         "dpkg",
         "mterminal",
@@ -156,8 +151,9 @@ public func ctor() {
         "druid",
         "dasd",
         "sshd",
-        "zsh",
-        "jailbreakd"
+        "jailbreakd",
+        "datastore",
+        "backupagent"
     ]
         .map {
             ProcessInfo.processInfo.processName.lowercased().contains($0)
@@ -168,7 +164,7 @@ public func ctor() {
         return
     }
     
-    let repcl: @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRawPointer = dlopen_hook
+    let repcl: @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRawPointer = dlopen_hook_oldabi
     let repptr = unsafeBitCast(repcl, to: UnsafeMutableRawPointer.self)
     
     hookFunction(dlsym(dlopen(nil, RTLD_NOW), "dlopen"), repptr, orig)
