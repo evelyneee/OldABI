@@ -71,7 +71,6 @@ func oneshot_fix_oldabi() {
 
 func looksLegacy(_ path: UnsafePointer<CChar>) -> Bool {
     guard let handle = fopen(path, "r") else {
-        print("Failed to open destination file")
         return false
     }
     
@@ -143,6 +142,7 @@ func dlopen_hook_oldabi(_ path: UnsafePointer<CChar>, _ loadtype: Int32) -> Unsa
 public func ctor() {
     
     let blacklist = [
+        "webcontent",
         "webkit",
         "apt",
         "dpkg",
