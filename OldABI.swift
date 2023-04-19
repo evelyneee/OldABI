@@ -146,10 +146,10 @@ public func ctor() {
 		"/usr/libexec/backboardd",
 		"/usr/libexec/nfcd"
 	].map {
-		ProcessInfo.processInfo.arguments[0].lowercased().hasPrefix($0.lowercased())
+		ProcessInfo.processInfo.arguments[0].hasPrefix($0)
 	}.contains(true)
 
-	if !whitelist {
+	if !whitelist && !ProcessInfo.processInfo.arguments[0].contains("/procursus/Applications/") {
 		return
 	}
 
