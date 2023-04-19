@@ -42,7 +42,6 @@ let hookFunction = {
 }()
 
 func oneshot_fix_oldabi() {
-    
     for image in 0..<_dyld_image_count() {
         if String(cString: _dyld_get_image_name(image)) == "/usr/lib/libobjc.A.dylib" ||
             String(cString: _dyld_get_image_name(image)) == "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" {
@@ -140,30 +139,20 @@ func dlopen_hook_oldabi(_ path: UnsafePointer<CChar>, _ loadtype: Int32) -> Unsa
 
 @_cdecl("swift_ctor")
 public func ctor() {
-    
-    let blacklist = [
-        "webcontent",
-        "webkit",
-        "apt",
-        "dpkg",
-        "mterminal",
-        "cloud",
-        "druid",
-        "dasd",
-        "sshd",
-        "jailbreakd",
-        "datastore",
-        "backupagent"
-    ]
-        .map {
-            ProcessInfo.processInfo.processName.lowercased().contains($0)
-        }
-        .contains(true)
-    
-    guard !blacklist else {
-        return
-    }
-    
+	let whitelist = [
+		"/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+		"/Applications/",
+		"/usr/sbin/mediaserverd",
+		"/usr/libexec/backboardd",
+		"/usr/libexec/nfcd"
+	].map {
+		ProcessInfo.processInfo.arguments[0].lowercased().hasPrefix($0.lowercased())
+	}.contains(true)
+
+	if !whitelist {
+		return
+	}
+
     let repcl: @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRawPointer = dlopen_hook_oldabi
     let repptr = unsafeBitCast(repcl, to: UnsafeMutableRawPointer.self)
     
