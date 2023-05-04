@@ -137,6 +137,29 @@ func dlopen_hook_oldabi(_ path: UnsafePointer<CChar>, _ loadtype: Int32) -> Unsa
     return unsafeBitCast(orig.pointee, to: dlopen_body.self)(path, loadtype)
 }
 
+func prefstuff() {
+    let bundlePath = ("/var/jb/Library/PreferenceBundles" as NSString).resolvingSymlinksInPath
+    let enumerator = FileManager.default.enumerator(atPath: bundlePath)
+    while let element = enumerator?.nextObject() as? String {
+        if element.hasSuffix("bundle") {
+            let info = "\(bundlePath)/\(element)/Info.plist"
+            if FileManager.default.fileExists(atPath: info) {
+                struct Info: Codable {
+                    var CFBundleExecutable: String?
+                }
+                if let infoData = try? Data(contentsOf: NSURL.fileURL(withPath: info)) {
+                    if let infoRoot = try? PropertyListDecoder().decode(Info.self, from: infoData) {
+                        let exec = infoRoot.CFBundleExecutable! as NSString
+                        if(looksLegacy("\(bundlePath)/\(element)/\(exec)")) {
+                            oneshot_fix_oldabi()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @_cdecl("swift_ctor")
 public func ctor() {
 	let whitelist = [
@@ -149,9 +172,13 @@ public func ctor() {
 		ProcessInfo.processInfo.arguments[0].hasPrefix($0)
 	}.contains(true)
 
-	if !whitelist && !ProcessInfo.processInfo.arguments[0].contains("/procursus/Applications/") {
-		return
-	}
+    if !whitelist && !ProcessInfo.processInfo.arguments[0].contains("/procursus/Applications/") {
+        return
+    }
+
+    if ProcessInfo.processInfo.arguments[0].contains("/Applications/Preferences.app/Preferences") {
+        prefstuff()
+    }
 
     let repcl: @convention(c) (UnsafePointer<CChar>, Int32) -> UnsafeRawPointer = dlopen_hook_oldabi
     let repptr = unsafeBitCast(repcl, to: UnsafeMutableRawPointer.self)
